@@ -63,10 +63,10 @@ class R2dbcObservationConnectionFactoryBeanPostProcessorTest {
 
 		ConnectionFactory connectionFactory = mock(ConnectionFactory.class);
 		result = processor.postProcessAfterInitialization(connectionFactory, "connection-factory");
-		assertThat(result).isNotSameAs(connectionFactory).isInstanceOfSatisfying(Wrapped.class, (wrapped) -> {
+		assertThat(result).isNotSameAs(connectionFactory).isInstanceOfSatisfying(Wrapped.class, wrapped -> {
 			Object unwrapped = wrapped.unwrap(ConnectionFactory.class);
 			assertThat(unwrapped).isSameAs(connectionFactory);
-		}).isInstanceOfSatisfying(ProxyConfigHolder.class, (holder) -> {
+		}).isInstanceOfSatisfying(ProxyConfigHolder.class, holder -> {
 			ProxyConfig proxyConfig = holder.getProxyConfig();
 			assertThat(proxyConfig.getListeners().getListeners()).hasSize(1).singleElement()
 					.isExactlyInstanceOf(ObservationProxyExecutionListener.class);

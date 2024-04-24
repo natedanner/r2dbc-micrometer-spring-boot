@@ -60,9 +60,8 @@ public class R2dbcObservationConnectionFactoryBeanPostProcessor implements BeanP
 			ObservationProxyExecutionListener listener = new ObservationProxyExecutionListener(
 					this.observationRegistryProvider.getObject(), connectionFactory, url);
 			listener.setIncludeParameterValues(includeParamValues);
-			ConnectionFactory proxyConnectionFactory = ProxyConnectionFactory.builder(connectionFactory)
+			return ProxyConnectionFactory.builder(connectionFactory)
 					.listener(listener).build();
-			return proxyConnectionFactory;
 		}
 		return bean;
 	}

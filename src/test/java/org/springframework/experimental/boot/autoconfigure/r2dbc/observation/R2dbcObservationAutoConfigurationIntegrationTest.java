@@ -75,12 +75,11 @@ class R2dbcObservationAutoConfigurationIntegrationTest {
 		// verify initial table/data creation
 		SpansAssert.assertThat(getFinishedSpans()).hasNumberOfSpansWithNameEqualTo("query", 3)
 				.assertThatASpanWithNameEqualTo("query").hasTagWithKey("r2dbc.query[0]");
-		List<FinishedSpan> querySpans = getFinishedSpans().stream().filter((span) -> "query".equals(span.getName()))
+		List<FinishedSpan> querySpans = getFinishedSpans().stream().filter(span -> "query".equals(span.getName()))
 				.toList();
 		SpanAssert.assertThat(querySpans.get(0)).hasTag("r2dbc.query[0]", "CREATE TABLE emp(id INT, name VARCHAR(20))");
-		SpansAssert.assertThat(querySpans.subList(1, 3)).allSatisfy((span) -> {
-			SpanAssert.assertThat(span).hasTagWithKey("r2dbc.query[0]");
-		});
+		SpansAssert.assertThat(querySpans.subList(1, 3)).allSatisfy(span ->
+			SpanAssert.assertThat(span).hasTagWithKey("r2dbc.query[0]"));
 		this.testSpanHandler.clear();
 
 		// start parent observation. note: it's not scoped
@@ -96,7 +95,7 @@ class R2dbcObservationAutoConfigurationIntegrationTest {
 		SpansAssert.assertThat(getFinishedSpans())
 				.hasNumberOfSpansEqualTo(2)
 				.haveSameTraceId()
-				.hasASpanWithName("query", (spanAssert) -> {
+				.hasASpanWithName("query", spanAssert -> {
 					spanAssert.hasTag("r2dbc.query[0]", "SELECT id, name FROM emp WHERE id = ?")
 							.doesNotHaveTagWithKey("r2dbc.param[0]");
 				})

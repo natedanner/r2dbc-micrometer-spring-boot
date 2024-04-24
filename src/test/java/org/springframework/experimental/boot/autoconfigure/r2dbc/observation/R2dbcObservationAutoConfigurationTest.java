@@ -39,9 +39,8 @@ class R2dbcObservationAutoConfigurationTest {
 		new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(R2dbcObservationAutoConfiguration.class))
 				.withBean(ConnectionFactory.class, () -> mock(ConnectionFactory.class))
 				.withInitializer(new ConditionEvaluationReportLoggingListener())
-				.withBean(ObservationRegistry.class, ObservationRegistry::create).run((context) -> {
-					assertThat(context).hasSingleBean(R2dbcObservationConnectionFactoryBeanPostProcessor.class);
-				});
+				.withBean(ObservationRegistry.class, ObservationRegistry::create).run(context ->
+					assertThat(context).hasSingleBean(R2dbcObservationConnectionFactoryBeanPostProcessor.class));
 	}
 
 }
